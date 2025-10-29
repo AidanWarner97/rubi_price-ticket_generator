@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Price Ticket Generator{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="page-header">
+        <h2>Generate Price Tickets</h2>
+        <p>Select products from the database or add custom tickets</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('generate_tickets') }}" id="ticketForm">
+        <!-- Selection Tools -->
+        <div class="selection-tools">
+            <button type="button" class="btn btn-secondary" onclick="selectAll()">Select All</button>
+            <button type="button" class="btn btn-secondary" onclick="deselectAll()">Deselect All</button>
+            <span class="selection-count" id="selectionCount">0 selected</span>
+        </div>
+
+        <!-- Product Grid -->
+        {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card" onclick="toggleCard(this, {{ product.id }})">
+                <input type="checkbox" 
+                       name="product_ids[]" 
+                       value="{{ product.id }}" 
+                       class="product-checkbox"
+                       onclick="event.stopPropagation(); updateCount();">
+                <div class="product-code">{{ product.quick_code }}</div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-price">${{ "%.2f"|format(product.rrp) }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No products in database. Add custom tickets below to get started.</p>
+        </div>
+        {% endif %}
+
+        <!-- Custom Tickets Section -->
+        <div class="form-section">
+            <h3>Add Custom Tickets</h3>
+            <p>Custom tickets are temporary and won't be saved to the database.</p>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="custom_quick_code">Quick Code</label>
+                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" form="customForm">
+                </div>
+                
+                <div class="form-group">
+                    <label for="custom_name">Product Name</label>
+                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" form="customForm">
+                </div>
+                
+                <div class="form-group">
+                    <label for="custom_rrp">RRP</label>
+                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" form="customForm">
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('customForm').submit()">
+                Add Custom Ticket
+            </button>
+
+            <!-- Display Custom Tickets -->
+            {% if custom_tickets %}
+            <div class="custom-tickets-list">
+                <h4 class="section-heading">Custom Tickets:</h4>
+                {% for ticket in custom_tickets %}
+                <div class="custom-ticket-item">
+                    <div class="custom-ticket-info">
+                        <strong>{{ ticket.quick_code }}</strong>
+                        <span>{{ ticket.name }}</span>
+                        <span class="price">${{ "%.2f"|format(ticket.rrp) }}</span>
+                    </div>
+                    <form method="POST" action="{{ url_for('remove_custom_ticket', ticket_id=ticket.id) }}" style="display: inline;">
+                        <button type="submit" class="btn-remove">Remove</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Generate Button -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-large btn-block">Generate PDF Tickets</button>
+        </div>
+    </form>
+</div>
+
+<!-- Separate form for adding custom tickets -->
+<form method="POST" action="{{ url_for('add_custom_ticket') }}" id="customForm" style="display: none;">
+    <input type="hidden" name="quick_code" id="hidden_quick_code">
+    <input type="hidden" name="name" id="hidden_name">
+    <input type="hidden" name="rrp" id="hidden_rrp">
+</form>
+
+<script>
+// Transfer values from visible form to hidden form
+document.getElementById('customForm').addEventListener('submit', function(e) {
+    document.getElementById('hidden_quick_code').value = document.getElementById('custom_quick_code').value;
+    document.getElementById('hidden_name').value = document.getElementById('custom_name').value;
+    document.getElementById('hidden_rrp').value = document.getElementById('custom_rrp').value;
+});
+
+function toggleCard(card, productId) {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    updateCardStyle(card, checkbox.checked);
+    updateCount();
+}
+
+function updateCardStyle(card, isChecked) {
+    if (isChecked) {
+        card.classList.add('selected');
+    } else {
+        card.classList.remove('selected');
+    }
+}
+
+function selectAll() {
+    document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+        checkbox.checked = true;
+        updateCardStyle(checkbox.closest('.product-card'), true);
+    });
+    updateCount();
+}
+
+function deselectAll() {
+    document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+        updateCardStyle(checkbox.closest('.product-card'), false);
+    });
+    updateCount();
+}
+
+function updateCount() {
+    const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
+    const customCount = {{ custom_tickets|length }};
+    const totalCount = checkedCount + customCount;
+    document.getElementById('selectionCount').textContent = totalCount + ' selected';
+}
+
+// Initialize card styles and count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+        updateCardStyle(checkbox.closest('.product-card'), checkbox.checked);
+    });
+    updateCount();
+});
+</script>
+{% endblock %}

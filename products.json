@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "quick_code": "ABC123",
+    "name": "Premium Wireless Headphones",
+    "rrp": 149.99
+  },
+  {
+    "id": 2,
+    "quick_code": "XYZ789",
+    "name": "Ergonomic Office Chair",
+    "rrp": 299.99
+  },
+  {
+    "id": 3,
+    "quick_code": "DEF456",
+    "name": "Stainless Steel Water Bottle",
+    "rrp": 24.99
+  },
+  {
+    "id": 4,
+    "quick_code": "GHI012",
+    "name": "Mechanical Keyboard RGB",
+    "rrp": 89.99
+  },
+  {
+    "id": 5,
+    "quick_code": "JKL345",
+    "name": "Smart LED Desk Lamp",
+    "rrp": 45.50
+  }
+]
