@@ -9,7 +9,7 @@
         <p>Select products from the database or add custom tickets</p>
     </div>
 
-    <form method="POST" action="{{ url_for('generate_tickets') }}" id="ticketForm">
+    <form method="POST" action="{{ base_url }}{{ url_for('generate_tickets') }}" id="ticketForm">
         <!-- Selection Tools -->
         <div class="selection-tools">
             <button type="button" class="btn btn-secondary" onclick="selectAll()">Select All</button>
@@ -47,21 +47,21 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="custom_quick_code">Quick Code</label>
-                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" form="customForm">
+                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123">
                 </div>
                 
                 <div class="form-group">
                     <label for="custom_name">Product Name</label>
-                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" form="customForm">
+                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget">
                 </div>
                 
                 <div class="form-group">
                     <label for="custom_rrp">RRP</label>
-                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" form="customForm">
+                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99">
                 </div>
             </div>
             
-            <button type="button" class="btn btn-secondary" onclick="document.getElementById('customForm').submit()">
+            <button type="button" class="btn btn-secondary" onclick="addCustomTicket()">
                 Add Custom Ticket
             </button>
 
@@ -76,9 +76,7 @@
                         <span>{{ ticket.name }}</span>
                         <span class="price">£{{ "%.2f"|format(ticket.rrp) }}</span>
                     </div>
-                    <form method="POST" action="{{ url_for('remove_custom_ticket', ticket_id=ticket.id) }}" style="display: inline;">
-                        <button type="submit" class="btn-remove">Remove</button>
-                    </form>
+                    <button type="button" class="btn-remove" onclick="removeCustomTicket('{{ ticket.id }}')">Remove</button>
                 </div>
                 {% endfor %}
             </div>
@@ -92,20 +90,59 @@
     </form>
 </div>
 
-<!-- Separate form for adding custom tickets -->
-<form method="POST" action="{{ url_for('add_custom_ticket') }}" id="customForm" style="display: none;">
+<!-- Separate forms for custom ticket operations -->
+<form method="POST" action="{{ base_url }}{{ url_for('add_custom_ticket') }}" id="customForm" style="display: none;">
     <input type="hidden" name="quick_code" id="hidden_quick_code">
     <input type="hidden" name="name" id="hidden_name">
     <input type="hidden" name="rrp" id="hidden_rrp">
 </form>
 
+<!-- Single hidden form for removing custom tickets -->
+<form method="POST" action="" id="removeForm" style="display: none;">
+    <input type="hidden" name="ticket_id" id="ticket_id_to_remove">
+</form>
+
 <script>
-// Transfer values from visible form to hidden form
-document.getElementById('customForm').addEventListener('submit', function(e) {
-    document.getElementById('hidden_quick_code').value = document.getElementById('custom_quick_code').value;
-    document.getElementById('hidden_name').value = document.getElementById('custom_name').value;
-    document.getElementById('hidden_rrp').value = document.getElementById('custom_rrp').value;
-});
+function addCustomTicket() {
+    // Get values from visible form fields
+    const quickCode = document.getElementById('custom_quick_code').value.trim();
+    const name = document.getElementById('custom_name').value.trim();
+    const rrp = document.getElementById('custom_rrp').value.trim();
+    
+    // Basic validation
+    if (!quickCode) {
+        alert('Quick code is required for a custom ticket.');
+        return;
+    }
+    if (!name) {
+        alert('Product name is required for a custom ticket.');
+        return;
+    }
+    if (!rrp) {
+        alert('RRP is required for a custom ticket.');
+        return;
+    }
+    
+    // Transfer values to hidden form and submit
+    document.getElementById('hidden_quick_code').value = quickCode;
+    document.getElementById('hidden_name').value = name;
+    document.getElementById('hidden_rrp').value = rrp;
+    document.getElementById('customForm').submit();
+    
+    // Clear the form fields after submitting
+    document.getElementById('custom_quick_code').value = '';
+    document.getElementById('custom_name').value = '';
+    document.getElementById('custom_rrp').value = '';
+}
+
+function removeCustomTicket(ticketId) {
+    if (confirm('Are you sure you want to remove this custom ticket?')) {
+        const form = document.getElementById('removeForm');
+        document.getElementById('ticket_id_to_remove').value = ticketId;
+        form.action = "{{ base_url }}{{ url_for('remove_custom_ticket') }}";
+        form.submit();
+    }
+}
 
 function toggleCard(card, productId) {
     const checkbox = card.querySelector('input[type="checkbox"]');
