@@ -1,0 +1,13 @@
+[Unit]
+Description=Rubi Price Ticket Generator
+After=network.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/rubi_price-ticket_generator
+ExecStart=/opt/rubi_price-ticket_generator/venv/bin/python /opt/rubi_price-ticket_generator/wsgi.py
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
