@@ -29,6 +29,29 @@ def static_files(filename):
     print(f"Serving static file: {filename}")
     return app.send_static_file(filename)
 
+# Test route to debug
+@app.route('/rubi-price-ticket/test')
+def test_route():
+    return "Flask app is working at subpath!"
+
+# Also handle static files without the subpath (fallback)
+@app.route('/static/<path:filename>')
+def static_fallback(filename):
+    """Fallback static file serving"""
+    print(f"Serving static file via fallback: {filename}")
+    return app.send_static_file(filename)
+
+# CSS route as a workaround for static file issues
+@app.route('/rubi-price-ticket/css/style.css')
+def serve_css():
+    """Serve CSS directly to bypass static file issues"""
+    try:
+        with open(os.path.join(app.static_folder, 'style.css'), 'r') as f:
+            css_content = f.read()
+        return css_content, 200, {'Content-Type': 'text/css'}
+    except FileNotFoundError:
+        return "/* CSS file not found */", 404, {'Content-Type': 'text/css'}
+
 
 def load_products():
     """Load products from JSON file (read-only)"""
@@ -44,6 +67,8 @@ def index():
     products = load_products()
     # Get custom tickets from session
     custom_tickets = session.get('custom_tickets', [])
+    print(f"Base URL: {BASE_URL}")
+    print(f"Static URL would be: {BASE_URL}/static/style.css")
     return render_template('index.html', products=products, custom_tickets=custom_tickets)
 
 
