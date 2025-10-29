@@ -1,32 +1,146 @@
 [
   {
     "id": 1,
-    "quick_code": "ABC123",
-    "name": "Premium Wireless Headphones",
-    "rrp": 149.99
+    "quick_code": "57320",
+    "name": "Foragres Drill Bit (120mm)",
+    "rrp": 151.00
   },
   {
     "id": 2,
-    "quick_code": "XYZ789",
-    "name": "Ergonomic Office Chair",
-    "rrp": 299.99
+    "quick_code": "165978",
+    "name": "Drygres Drill Bit (60mm)",
+    "rrp": 91.00
   },
   {
     "id": 3,
-    "quick_code": "DEF456",
-    "name": "Stainless Steel Water Bottle",
-    "rrp": 24.99
+    "quick_code": "165977",
+    "name": "Drygres Drill Bit (50mm)",
+    "rrp": 78.00
   },
   {
     "id": 4,
-    "quick_code": "GHI012",
-    "name": "Mechanical Keyboard RGB",
-    "rrp": 89.99
+    "quick_code": "165976",
+    "name": "Drygres Drill Bit (43mm)",
+    "rrp": 70.00
   },
   {
     "id": 5,
-    "quick_code": "JKL345",
-    "name": "Smart LED Desk Lamp",
-    "rrp": 45.50
+    "quick_code": "57278",
+    "name": "Drygres Drill Bit (35mm)",
+    "rrp": 59.00
+  },
+  {
+    "id": 6,
+    "quick_code": "165974",
+    "name": "Drygres Drill Bit (28mm)",
+    "rrp": 50.00
+  },
+  {
+    "id": 7,
+    "quick_code": "165973",
+    "name": "Drygres Drill Bit (20mm)",
+    "rrp": 43.00
+  },
+  {
+    "id": 8,
+    "quick_code": "57274",
+    "name": "Drygres Drill Bit (12mm)",
+    "rrp": 25.00
+  },
+  {
+    "id": 9,
+    "quick_code": "165970",
+    "name": "Drygres Drill Bit (8mm)",
+    "rrp": 23.00
+  },
+  {
+    "id": 10,
+    "quick_code": "165968",
+    "name": "Drygres Drill Bit (6mm)",
+    "rrp": 22.00
+  },
+  {
+    "id": 11,
+    "quick_code": "176502",
+    "name": "Conical Diamond Bit (2-35mm)",
+    "rrp": 39.00
+  },
+  {
+    "id": 12,
+    "quick_code": "57339",
+    "name": "Easygres Drill Bit Kit (6-12mm)",
+    "rrp": 39.00
+  },
+  {
+    "id": 13,
+    "quick_code": "165959",
+    "name": "TVR 115 Superpro",
+    "rrp": 35.00
+  },
+  {
+    "id": 14,
+    "quick_code": "57184",
+    "name": "TVA 115 Superpro",
+    "rrp": 36.00
+  },
+  {
+    "id": 15,
+    "quick_code": "176481",
+    "name": "TGS 115 Superpro",
+    "rrp": 62.00
+  },
+  {
+    "id": 16,
+    "quick_code": "176549",
+    "name": "Mini Viper TVA Superpro",
+    "rrp": 35.00
+  },
+  {
+    "id": 17,
+    "quick_code": "176503",
+    "name": "Conical Diamond Bit (20-48mm)",
+    "rrp": 54.00
+  },
+  {
+    "id": 18,
+    "quick_code": "165946",
+    "name": "Suction Cup with Vaacuum Pump",
+    "rrp": 92.00
+  },
+  {
+    "id": 19,
+    "quick_code": "57878",
+    "name": "Gel Duplex Knee Pads",
+    "rrp": 55.00
+  },
+  {
+    "id": 20,
+    "quick_code": "165984",
+    "name": "4 Drygres Bit Kit",
+    "rrp": 284.00
+  },
+  {
+    "id": 21,
+    "quick_code": "165983",
+    "name": "6 Drygres Bit Kit",
+    "rrp": 316.00
+  },
+  {
+    "id": 22,
+    "quick_code": "57293",
+    "name": "TCR Disc and Drygres Drill Bit Kit",
+    "rrp": 164.00
+  },
+  {
+    "id": 23,
+    "quick_code": "176498",
+    "name": "Bullnose Superpro",
+    "rrp": 120.00
+  },
+  {
+    "id": 24,
+    "quick_code": "57723",
+    "name": "Long Tile Spacers (3mm) x1000",
+    "rrp": 15.00
   }
 ]
