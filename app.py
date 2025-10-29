@@ -23,14 +23,14 @@ def inject_base_url():
     return {'base_url': BASE_URL}
 
 # Custom static file route to handle subpath deployment
-@app.route('/rubi-price-ticket/static/<path:filename>')
+@app.route('/static/<path:filename>')
 def static_files(filename):
     """Serve static files with the correct subpath"""
     print(f"Serving static file: {filename}")
     return app.send_static_file(filename)
 
 # Test route to debug
-@app.route('/rubi-price-ticket/test')
+@app.route('/test')
 def test_route():
     return "Flask app is working at subpath!"
 
@@ -42,7 +42,7 @@ def static_fallback(filename):
     return app.send_static_file(filename)
 
 # CSS route as a workaround for static file issues
-@app.route('/rubi-price-ticket/css/style.css')
+@app.route('/static/style.css')
 def serve_css():
     """Serve CSS directly to bypass static file issues"""
     try:
