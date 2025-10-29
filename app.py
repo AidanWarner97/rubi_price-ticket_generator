@@ -22,6 +22,13 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 def inject_base_url():
     return {'base_url': BASE_URL}
 
+# Custom static file route to handle subpath deployment
+@app.route('/rubi-price-ticket/static/<path:filename>')
+def static_files(filename):
+    """Serve static files with the correct subpath"""
+    print(f"Serving static file: {filename}")
+    return app.send_static_file(filename)
+
 
 def load_products():
     """Load products from JSON file (read-only)"""
