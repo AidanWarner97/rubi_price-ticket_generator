@@ -11,3 +11,5 @@ instance/
 *.db
 *.sqlite
 generated_tickets/
+templates/.ipynb_checkpoints/
+cookies.txt

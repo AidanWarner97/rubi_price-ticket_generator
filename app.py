@@ -7,12 +7,20 @@ from pdf_generator import generate_price_tickets
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-in-production'
 
+# Base URL for deployment under subpath
+BASE_URL = '/rubi-price-ticket'
+
 # Data file path
 DATA_FILE = 'products.json'
 OUTPUT_DIR = 'generated_tickets'
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# Context processor to inject base_url into all templates
+@app.context_processor
+def inject_base_url():
+    return {'base_url': BASE_URL}
 
 
 def load_products():
@@ -36,15 +44,46 @@ def index():
 def add_custom_ticket():
     """Add a custom ticket temporarily (not saved to database)"""
     custom_tickets = session.get('custom_tickets', [])
-    
+    # Basic server-side validation and parsing
+    quick_code = request.form.get('quick_code', '').strip()
+    name = request.form.get('name', '').strip()
+    rrp_raw = request.form.get('rrp', '').strip()
+
+    # Helper to parse currency-like input (accepts '£', '$', commas, spaces)
+    def parse_rrp(value: str):
+        if not value:
+            raise ValueError('RRP is required')
+        # Remove common currency symbols and separators
+        cleaned = value.replace('£', '').replace('$', '').replace(',', '').strip()
+        if cleaned == '':
+            raise ValueError('RRP is required')
+        return float(cleaned)
+
+    # Validate fields
+    if not quick_code:
+        flash('Quick code is required for a custom ticket.', 'error')
+        return redirect(url_for('index'))
+
+    if not name:
+        flash('Product name is required for a custom ticket.', 'error')
+        return redirect(url_for('index'))
+
+    try:
+        rrp = parse_rrp(rrp_raw)
+    except ValueError as e:
+        flash(f'Invalid RRP value: {str(e)}', 'error')
+        return redirect(url_for('index'))
+
+    # Generate unique ID based on timestamp to avoid duplicates
+    import time
     new_ticket = {
-        'id': f"custom_{len(custom_tickets) + 1}",
-        'quick_code': request.form['quick_code'],
-        'name': request.form['name'],
-        'rrp': float(request.form['rrp']),
+        'id': f"custom_{int(time.time() * 1000)}",  # Use timestamp in milliseconds for uniqueness
+        'quick_code': quick_code,
+        'name': name,
+        'rrp': rrp,
         'is_custom': True
     }
-    
+
     custom_tickets.append(new_ticket)
     session['custom_tickets'] = custom_tickets
     session.modified = True
@@ -54,14 +93,33 @@ def add_custom_ticket():
 
 
 @app.route('/remove_custom/<ticket_id>', methods=['POST'])
-def remove_custom_ticket(ticket_id):
+@app.route('/remove_custom', methods=['POST'])
+def remove_custom_ticket(ticket_id=None):
     """Remove a custom ticket from session"""
-    custom_tickets = session.get('custom_tickets', [])
-    custom_tickets = [t for t in custom_tickets if t['id'] != ticket_id]
-    session['custom_tickets'] = custom_tickets
-    session.modified = True
+    # Get ticket_id from URL parameter or form data
+    if ticket_id is None:
+        ticket_id = request.form.get('ticket_id')
     
-    flash('Custom ticket removed!', 'success')
+    if not ticket_id:
+        flash('No ticket ID provided for removal.', 'error')
+        return redirect(url_for('index'))
+    
+    custom_tickets = session.get('custom_tickets', [])
+    original_count = len(custom_tickets)
+    
+    # Debug: Print ticket IDs for debugging
+    print(f"Attempting to remove ticket_id: {ticket_id}")
+    print(f"Current ticket IDs: {[t['id'] for t in custom_tickets]}")
+    
+    custom_tickets = [t for t in custom_tickets if t['id'] != ticket_id]
+    
+    if len(custom_tickets) == original_count:
+        flash(f'Custom ticket with ID {ticket_id} not found.', 'error')
+    else:
+        session['custom_tickets'] = custom_tickets
+        session.modified = True
+        flash('Custom ticket removed!', 'success')
+    
     return redirect(url_for('index'))
 
 
