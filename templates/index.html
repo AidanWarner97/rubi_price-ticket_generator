@@ -29,7 +29,7 @@
                        onclick="event.stopPropagation(); updateCount();">
                 <div class="product-code">{{ product.quick_code }}</div>
                 <div class="product-name">{{ product.name }}</div>
-                <div class="product-price">${{ "%.2f"|format(product.rrp) }}</div>
+                <div class="product-price">£{{ "%.2f"|format(product.rrp) }}</div>
             </div>
             {% endfor %}
         </div>
@@ -74,7 +74,7 @@
                     <div class="custom-ticket-info">
                         <strong>{{ ticket.quick_code }}</strong>
                         <span>{{ ticket.name }}</span>
-                        <span class="price">${{ "%.2f"|format(ticket.rrp) }}</span>
+                        <span class="price">£{{ "%.2f"|format(ticket.rrp) }}</span>
                     </div>
                     <form method="POST" action="{{ url_for('remove_custom_ticket', ticket_id=ticket.id) }}" style="display: inline;">
                         <button type="submit" class="btn-remove">Remove</button>
