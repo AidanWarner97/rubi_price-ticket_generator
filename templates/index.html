@@ -21,7 +21,7 @@
         <p class="text-gray-600">Select products from the database or add custom tickets</p>
     </div>
 
-    <form method="POST" action="{{ url_for('generate_tickets') }}" id="ticketForm">
+    <form method="POST" action="{{ base_url }}{{ url_for('generate_tickets') }}" id="ticketForm">
         <!-- Selection Tools -->
         <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
             <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors" onclick="selectAll()">Select All</button>
