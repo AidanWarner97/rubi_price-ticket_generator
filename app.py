@@ -186,7 +186,7 @@ def generate_tickets():
         # Clear custom tickets after successful generation
         session['custom_tickets'] = []
         session.modified = True
-        flash(f'Successfully generated tickets for {len(all_tickets)} products!', 'success')
+        # Don't flash success message - handled by JavaScript
         return send_file(output_file, as_attachment=True, download_name=f'price_tickets_{timestamp}.pdf')
     except Exception as e:
         flash(f'Error generating PDF: {str(e)}', 'error')
