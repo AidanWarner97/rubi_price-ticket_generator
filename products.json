@@ -142,5 +142,77 @@
     "quick_code": "57723",
     "name": "Long Tile Spacers (3mm) x1000",
     "rrp": 15.00
+  },
+  {
+    "id": 25,
+    "quick_code": "57719",
+    "name": "Long Tile Spacers (2mm) x1000",
+    "rrp": 11.00
+  },
+  {
+    "id": 26,
+    "quick_code": "57718",
+    "name": "Long Tile Spacers (2mm) x300",
+    "rrp": 4.00
+  },
+  {
+    "id": 27,
+    "quick_code": "57714",
+    "name": "Long Tile Spacers (1.5mm) x300",
+    "rrp": 4.00
+  },
+  {
+    "id": 28,
+    "quick_code": "57020",
+    "name": "10mm Plus Scoring Wheel",
+    "rrp": 20.00
+  },
+  {
+    "id": 29,
+    "quick_code": "166074",
+    "name": "Cyclone Kit (3mm)",
+    "rrp": 48.00
+  },
+  {
+    "id": 30,
+    "quick_code": "166070",
+    "name": "Cyclone Caps x100",
+    "rrp": 27.00
+  },
+  {
+    "id": 31,
+    "quick_code": "166051",
+    "name": "Cyclone Bases (1mm) x100",
+    "rrp": 9.00
+  },
+  {
+    "id": 32,
+    "quick_code": "57852",
+    "name": "Black Plastic Tub (40L)",
+    "rrp": 6.00
+  },
+  {
+    "id": 33,
+    "quick_code": "166073",
+    "name": "Cyclone Kit (1.5mm)",
+    "rrp": 49.00
+  },
+  {
+    "id": 34,
+    "quick_code": "57095",
+    "name": "Sponge Float",
+    "rrp": 13.00
+  },
+  {
+    "id": 35,
+    "quick_code": "57645",
+    "name": "Double Suction Cup",
+    "rrp": 51.00
+  },
+  {
+    "id": 36,
+    "quick_code": "56978",
+    "name": "Speed-92 N with Case",
+    "rrp": 434.00
   }
 ]
