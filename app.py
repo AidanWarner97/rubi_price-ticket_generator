@@ -57,7 +57,9 @@ def load_products():
     """Load products from JSON file (read-only)"""
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as f:
-            return json.load(f)
+            products = json.load(f)
+            # Sort products by quick_code in ascending order (smallest to largest)
+            return sorted(products, key=lambda x: int(x['quick_code']))
     return []
 
 
