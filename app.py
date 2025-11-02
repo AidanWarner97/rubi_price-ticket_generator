@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file, flash, session
+from flask import Flask, render_template, request, redirect, url_for, send_file, flash, session, jsonify
 import json
 import os
 from datetime import datetime
@@ -64,6 +64,7 @@ def load_products():
 
 
 @app.route('/')
+@app.route(BASE_URL + '/')
 def index():
     """Main page - Display products for selection and allow custom tickets"""
     products = load_products()
@@ -75,13 +76,22 @@ def index():
 
 
 @app.route('/add_custom', methods=['POST'])
+@app.route(BASE_URL + '/add_custom', methods=['POST'])
 def add_custom_ticket():
-    """Add a custom ticket temporarily (not saved to database)"""
+    """Add a custom ticket temporarily (not saved to database) - AJAX version"""
     custom_tickets = session.get('custom_tickets', [])
-    # Basic server-side validation and parsing
-    quick_code = request.form.get('quick_code', '').strip()
-    name = request.form.get('name', '').strip()
-    rrp_raw = request.form.get('rrp', '').strip()
+    
+    # Get data from JSON request or form data
+    if request.is_json:
+        data = request.get_json()
+        quick_code = data.get('quick_code', '').strip()
+        name = data.get('name', '').strip()
+        rrp_raw = data.get('rrp', '').strip()
+    else:
+        # Fallback for form submission
+        quick_code = request.form.get('quick_code', '').strip()
+        name = request.form.get('name', '').strip()
+        rrp_raw = request.form.get('rrp', '').strip()
 
     # Helper to parse currency-like input (accepts '£', '$', commas, spaces)
     def parse_rrp(value: str):
@@ -95,17 +105,26 @@ def add_custom_ticket():
 
     # Validate fields
     if not quick_code:
-        flash('Quick code is required for a custom ticket.', 'error')
+        error_msg = 'Quick code is required for a custom ticket.'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 400
+        flash(error_msg, 'error')
         return redirect(url_for('index'))
 
     if not name:
-        flash('Product name is required for a custom ticket.', 'error')
+        error_msg = 'Product name is required for a custom ticket.'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 400
+        flash(error_msg, 'error')
         return redirect(url_for('index'))
 
     try:
         rrp = parse_rrp(rrp_raw)
     except ValueError as e:
-        flash(f'Invalid RRP value: {str(e)}', 'error')
+        error_msg = f'Invalid RRP value: {str(e)}'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 400
+        flash(error_msg, 'error')
         return redirect(url_for('index'))
 
     # Generate unique ID based on timestamp to avoid duplicates
@@ -122,20 +141,36 @@ def add_custom_ticket():
     session['custom_tickets'] = custom_tickets
     session.modified = True
     
-    flash('Custom ticket added!', 'success')
-    return redirect(url_for('index'))
+    if request.is_json:
+        return jsonify({
+            'success': True, 
+            'message': 'Custom ticket added!',
+            'ticket': new_ticket
+        })
+    else:
+        flash('Custom ticket added!', 'success')
+        return redirect(url_for('index'))
 
 
 @app.route('/remove_custom/<ticket_id>', methods=['POST'])
 @app.route('/remove_custom', methods=['POST'])
+@app.route(BASE_URL + '/remove_custom/<ticket_id>', methods=['POST'])
+@app.route(BASE_URL + '/remove_custom', methods=['POST'])
 def remove_custom_ticket(ticket_id=None):
-    """Remove a custom ticket from session"""
-    # Get ticket_id from URL parameter or form data
+    """Remove a custom ticket from session - AJAX version"""
+    # Get ticket_id from URL parameter, JSON data, or form data
     if ticket_id is None:
-        ticket_id = request.form.get('ticket_id')
+        if request.is_json:
+            data = request.get_json()
+            ticket_id = data.get('ticket_id')
+        else:
+            ticket_id = request.form.get('ticket_id')
     
     if not ticket_id:
-        flash('No ticket ID provided for removal.', 'error')
+        error_msg = 'No ticket ID provided for removal.'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 400
+        flash(error_msg, 'error')
         return redirect(url_for('index'))
     
     custom_tickets = session.get('custom_tickets', [])
@@ -148,22 +183,49 @@ def remove_custom_ticket(ticket_id=None):
     custom_tickets = [t for t in custom_tickets if t['id'] != ticket_id]
     
     if len(custom_tickets) == original_count:
-        flash(f'Custom ticket with ID {ticket_id} not found.', 'error')
+        error_msg = f'Custom ticket with ID {ticket_id} not found.'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 404
+        flash(error_msg, 'error')
     else:
         session['custom_tickets'] = custom_tickets
         session.modified = True
-        flash('Custom ticket removed!', 'success')
+        success_msg = 'Custom ticket removed!'
+        if request.is_json:
+            return jsonify({'success': True, 'message': success_msg})
+        flash(success_msg, 'success')
     
-    return redirect(url_for('index'))
+    if not request.is_json:
+        return redirect(url_for('index'))
+
+
+@app.route('/session_debug')
+@app.route(BASE_URL + '/session_debug')
+def session_debug():
+    """Debug route to check session contents"""
+    return jsonify({
+        'session_contents': dict(session),
+        'custom_tickets': session.get('custom_tickets', []),
+        'custom_tickets_count': len(session.get('custom_tickets', []))
+    })
 
 
 @app.route('/generate', methods=['POST'])
+@app.route(BASE_URL + '/generate', methods=['POST'])
 def generate_tickets():
     """Generate PDF tickets for selected products and custom tickets"""
     products = load_products()
+    
+    # Force fresh session read and ensure it's persistent
+    session.permanent = True
     custom_tickets = session.get('custom_tickets', [])
     
     selected_ids = request.form.getlist('product_ids[]')
+    
+    # Log generation attempt for monitoring
+    print(f"PDF Generation - Selected: {len(selected_ids)} products, Custom: {len(custom_tickets)} tickets")
+    print(f"Custom tickets in session: {custom_tickets}")
+    print(f"Selected product IDs: {selected_ids}")
     
     if not selected_ids and not custom_tickets:
         flash('Please select at least one product or add a custom ticket!', 'error')

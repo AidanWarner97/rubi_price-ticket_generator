@@ -21,7 +21,7 @@
         <p class="text-gray-600">Select products from the database or add custom tickets</p>
     </div>
 
-    <form method="POST" action="{{ base_url }}{{ url_for('generate_tickets') }}" id="ticketForm">
+    <form method="POST" action="{{ url_for('generate_tickets') }}" id="ticketForm">
         <!-- Selection Tools -->
         <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
             <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors" onclick="selectAll()">Select All</button>
@@ -59,42 +59,42 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
                     <label for="custom_quick_code" class="block text-sm font-medium text-gray-700 mb-2">Quick Code</label>
-                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
                 
                 <div>
                     <label for="custom_name" class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
                 
                 <div>
                     <label for="custom_rrp" class="block text-sm font-medium text-gray-700 mb-2">RRP</label>
-                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
             </div>
             
-            <button type="button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors" onclick="addCustomTicket()">
+            <button type="button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors" onclick="addCustomTicketAjax()" id="addCustomBtn">
                 Add Custom Ticket
             </button>
 
             <!-- Display Custom Tickets -->
-            {% if custom_tickets %}
-            <div class="mt-6">
-                <h4 class="text-lg font-medium text-gray-900 mb-4">Custom Tickets:</h4>
-                <div class="space-y-3">
-                    {% for ticket in custom_tickets %}
-                    <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div class="flex items-center gap-4">
-                            <span class="font-mono text-sm font-semibold text-blue-600">{{ ticket.quick_code }}</span>
-                            <span class="text-gray-800">{{ ticket.name }}</span>
-                            <span class="font-bold text-gray-800">£{{ "%.2f"|format(ticket.rrp) }}</span>
+            <div class="mt-6" id="customTicketsContainer">
+                <h4 class="text-lg font-medium text-gray-900 mb-4" id="customTicketsHeader" {% if not custom_tickets %}style="display: none;"{% endif %}>Custom Tickets:</h4>
+                <div class="space-y-3" id="customTicketsList">
+                    {% if custom_tickets %}
+                        {% for ticket in custom_tickets %}
+                        <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg" data-ticket-id="{{ ticket.id }}">
+                            <div class="flex items-center gap-4">
+                                <span class="font-mono text-sm font-semibold text-blue-600">{{ ticket.quick_code }}</span>
+                                <span class="text-gray-800">{{ ticket.name }}</span>
+                                <span class="font-bold text-gray-800">£{{ "%.2f"|format(ticket.rrp) }}</span>
+                            </div>
+                            <button type="button" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('{{ ticket.id }}')">Remove</button>
                         </div>
-                        <button type="button" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm rounded-md transition-colors" onclick="removeCustomTicket('{{ ticket.id }}')">Remove</button>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-            {% endif %}
         </div>
 
         <!-- Generate Button -->
@@ -118,20 +118,11 @@
     </form>
 </div>
 
-<!-- Separate forms for custom ticket operations -->
-<form method="POST" action="{{ base_url }}{{ url_for('add_custom_ticket') }}" id="customForm" style="display: none;">
-    <input type="hidden" name="quick_code" id="hidden_quick_code">
-    <input type="hidden" name="name" id="hidden_name">
-    <input type="hidden" name="rrp" id="hidden_rrp">
-</form>
-
-<!-- Single hidden form for removing custom tickets -->
-<form method="POST" action="" id="removeForm" style="display: none;">
-    <input type="hidden" name="ticket_id" id="ticket_id_to_remove">
-</form>
+<!-- Forms removed - using AJAX now -->
 
 <script>
-function addCustomTicket() {
+// AJAX function to add custom ticket
+async function addCustomTicketAjax() {
     // Get values from visible form fields
     const quickCode = document.getElementById('custom_quick_code').value.trim();
     const name = document.getElementById('custom_name').value.trim();
@@ -139,37 +130,186 @@ function addCustomTicket() {
     
     // Basic validation
     if (!quickCode) {
-        alert('Quick code is required for a custom ticket.');
+        showMessage('Quick code is required for a custom ticket.', 'error');
         return;
     }
     if (!name) {
-        alert('Product name is required for a custom ticket.');
+        showMessage('Product name is required for a custom ticket.', 'error');
         return;
     }
     if (!rrp) {
-        alert('RRP is required for a custom ticket.');
+        showMessage('RRP is required for a custom ticket.', 'error');
         return;
     }
     
-    // Transfer values to hidden form and submit
-    document.getElementById('hidden_quick_code').value = quickCode;
-    document.getElementById('hidden_name').value = name;
-    document.getElementById('hidden_rrp').value = rrp;
-    document.getElementById('customForm').submit();
+    // Disable the button to prevent double-submission
+    const addBtn = document.getElementById('addCustomBtn');
+    const originalText = addBtn.textContent;
+    addBtn.disabled = true;
+    addBtn.textContent = 'Adding...';
     
-    // Clear the form fields after submitting
-    document.getElementById('custom_quick_code').value = '';
-    document.getElementById('custom_name').value = '';
-    document.getElementById('custom_rrp').value = '';
+    try {
+        const response = await fetch('{{ url_for("add_custom_ticket") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quick_code: quickCode,
+                name: name,
+                rrp: rrp
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Add the ticket to the UI
+            addTicketToUI(result.ticket);
+            
+            // Clear the form fields
+            document.getElementById('custom_quick_code').value = '';
+            document.getElementById('custom_name').value = '';
+            document.getElementById('custom_rrp').value = '';
+            
+            // Update the count
+            updateCount();
+            
+            showMessage(result.message, 'success');
+        } else {
+            showMessage(result.error || 'Failed to add custom ticket.', 'error');
+        }
+    } catch (error) {
+        console.error('Error adding custom ticket:', error);
+        showMessage('Network error adding custom ticket. Please check your connection and try again.', 'error');
+    } finally {
+        // Re-enable the button
+        addBtn.disabled = false;
+        addBtn.textContent = originalText;
+    }
+}
+
+// AJAX function to remove custom ticket
+async function removeCustomTicketAjax(ticketId) {
+    if (!confirm('Are you sure you want to remove this custom ticket?')) {
+        return;
+    }
+    
+    // Find and disable the remove button
+    const ticketElement = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+    const removeBtn = ticketElement ? ticketElement.querySelector('button') : null;
+    
+    if (removeBtn) {
+        removeBtn.disabled = true;
+        removeBtn.textContent = 'Removing...';
+    }
+    
+    try {
+        const response = await fetch('{{ url_for("remove_custom_ticket") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ticket_id: ticketId
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Remove the ticket from the UI
+            removeTicketFromUI(ticketId);
+            
+            // Update the count
+            updateCount();
+            
+            showMessage(result.message, 'success');
+        } else {
+            // Re-enable button on error
+            if (removeBtn) {
+                removeBtn.disabled = false;
+                removeBtn.textContent = 'Remove';
+            }
+            showMessage(result.error || 'Failed to remove custom ticket.', 'error');
+        }
+    } catch (error) {
+        // Re-enable button on error
+        if (removeBtn) {
+            removeBtn.disabled = false;
+            removeBtn.textContent = 'Remove';
+        }
+        console.error('Error removing custom ticket:', error);
+        showMessage('Network error removing custom ticket. Please check your connection and try again.', 'error');
+    }
+}
+
+// Function to add a ticket to the UI
+function addTicketToUI(ticket) {
+    const ticketsList = document.getElementById('customTicketsList');
+    const ticketsHeader = document.getElementById('customTicketsHeader');
+    
+    // Show the header if it's hidden
+    ticketsHeader.style.display = 'block';
+    
+    // Create the ticket HTML with initial opacity 0 for animation
+    const ticketHTML = `
+        <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg opacity-0 transform scale-95 transition-all duration-300" data-ticket-id="${ticket.id}">
+            <div class="flex items-center gap-4">
+                <span class="font-mono text-sm font-semibold text-blue-600">${ticket.quick_code}</span>
+                <span class="text-gray-800">${ticket.name}</span>
+                <span class="font-bold text-gray-800">£${ticket.rrp.toFixed(2)}</span>
+            </div>
+            <button type="button" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('${ticket.id}')">Remove</button>
+        </div>
+    `;
+    
+    // Add the ticket to the list
+    ticketsList.insertAdjacentHTML('beforeend', ticketHTML);
+    
+    // Animate in the new ticket
+    const newTicket = ticketsList.lastElementChild;
+    setTimeout(() => {
+        newTicket.classList.remove('opacity-0', 'scale-95');
+        newTicket.classList.add('opacity-100', 'scale-100');
+    }, 10);
+}
+
+// Function to remove a ticket from the UI
+function removeTicketFromUI(ticketId) {
+    const ticketElement = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+    if (ticketElement) {
+        // Animate out the ticket
+        ticketElement.classList.add('opacity-0', 'scale-95', 'transform');
+        
+        setTimeout(() => {
+            ticketElement.remove();
+            
+            // Hide the header if no tickets remain
+            const ticketsList = document.getElementById('customTicketsList');
+            const ticketsHeader = document.getElementById('customTicketsHeader');
+            if (ticketsList.children.length === 0) {
+                ticketsHeader.style.display = 'none';
+            }
+        }, 300);
+    }
+}
+
+// Handle Enter key press in custom ticket form
+function handleCustomTicketKeypress(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addCustomTicketAjax();
+    }
+}
+
+// Fallback functions for backward compatibility
+function addCustomTicket() {
+    addCustomTicketAjax();
 }
 
 function removeCustomTicket(ticketId) {
-    if (confirm('Are you sure you want to remove this custom ticket?')) {
-        const form = document.getElementById('removeForm');
-        document.getElementById('ticket_id_to_remove').value = ticketId;
-        form.action = "{{ base_url }}{{ url_for('remove_custom_ticket') }}";
-        form.submit();
-    }
+    removeCustomTicketAjax(ticketId);
 }
 
 function toggleCard(card, productId) {
@@ -219,7 +359,7 @@ function deselectAll() {
 
 function updateCount() {
     const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
-    const customCount = {{ custom_tickets|length }};
+    const customCount = document.getElementById('customTicketsList').children.length;
     const totalCount = checkedCount + customCount;
     document.getElementById('selectionCount').textContent = totalCount + ' selected';
 }
@@ -257,9 +397,9 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCount();
     
     // Handle PDF generation form submission
-    document.getElementById('ticketForm').addEventListener('submit', function(e) {
+    document.getElementById('ticketForm').addEventListener('submit', async function(e) {
         const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
-        const customCount = {{ custom_tickets|length }};
+        const customCount = document.getElementById('customTicketsList').children.length;
         
         if (checkedCount === 0 && customCount === 0) {
             e.preventDefault();
@@ -267,15 +407,44 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Show loading message
-        showMessage('Generating PDF tickets...', 'success');
-        
-        // Allow form to submit normally (for file download)
-        // After a short delay, update the message
-        setTimeout(function() {
-            const totalCount = checkedCount + customCount;
-            showMessage(`Successfully generated tickets for ${totalCount} products! Download should start automatically.`, 'success');
-        }, 1000);
+        // If there are custom tickets, verify they're in the session before proceeding
+        if (customCount > 0) {
+            e.preventDefault(); // Prevent default submission temporarily
+            
+            try {
+                const sessionCheck = await fetch('{{ url_for("session_debug") }}');
+                const sessionData = await sessionCheck.json();
+                
+                console.log('Session check:', sessionData);
+                
+                if (sessionData.custom_tickets_count !== customCount) {
+                    showMessage(`Session sync issue detected. Custom tickets in UI: ${customCount}, in session: ${sessionData.custom_tickets_count}. Please try again.`, 'error');
+                    return;
+                }
+                
+                // Session is synced, proceed with form submission
+                showMessage('Generating PDF tickets...', 'success');
+                e.target.submit(); // Submit the form manually
+                
+                setTimeout(function() {
+                    const totalCount = checkedCount + customCount;
+                    showMessage(`Successfully generated tickets for ${totalCount} products! Download should start automatically.`, 'success');
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Session check failed:', error);
+                showMessage('Session verification failed. Please try again.', 'error');
+                return;
+            }
+        } else {
+            // No custom tickets, proceed normally
+            showMessage('Generating PDF tickets...', 'success');
+            
+            setTimeout(function() {
+                const totalCount = checkedCount + customCount;
+                showMessage(`Successfully generated tickets for ${totalCount} products! Download should start automatically.`, 'success');
+            }, 1000);
+        }
     });
 });
 </script>
