@@ -3,22 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Price Ticket Generator{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 min-h-screen text-gray-800 leading-relaxed">
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-6xl mx-auto px-5 py-6">
-            <h1 class="text-2xl font-bold text-gray-900">Price Ticket Generator</h1>
-        </div>
-    </nav>
+    <title>{% block title %}Price Ticket Generator - Aidan Warner{% endblock %}</title>
     
-    <div class="py-8 px-5">
-        <div class="max-w-6xl mx-auto">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+        }
+        
+        /* Mobile menu styles */
+        .mobile-menu {
+            max-height: 0;
+            transition: max-height 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.open {
+            max-height: 400px;
+        }
+        
+        /* Custom checkbox styling for dark theme */
+        .product-checkbox {
+            accent-color: #89b4fa;
+        }
+        
+        .product-checkbox:checked {
+            accent-color: #89b4fa;
+            background-color: #89b4fa;
+            border-color: #89b4fa;
+        }
+    </style>
+</head>
+<body class="bg-[#1e1e2e] text-white min-h-screen flex flex-col">
+    
+    <!-- Header -->
+    <div class="sticky top-0 z-50 bg-[#45475a] shadow-lg border-b border-[#6c7086] relative">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="text-2xl lg:text-3xl font-bold text-white">
+                    Price Ticket Generator
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex justify-center flex-wrap items-center">
+                    <a href="https://awarner.co.uk" class="p-2 m-1 text-sm border-2 border-[#6c7086] rounded hover:bg-[#6c7086] transition-colors cursor-pointer text-white no-underline">Main Site</a>
+                    <a href="https://tools.awarner.co.uk" class="p-2 m-1 text-sm border-2 border-[#6c7086] rounded hover:bg-[#6c7086] transition-colors cursor-pointer text-white no-underline">Other Tools</a>
+                </div>
+                
+                <!-- Mobile Burger Button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-white hover:text-[#89b4fa] focus:outline-none p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="mobile-menu lg:hidden bg-[#45475a] border-t border-[#6c7086] overflow-hidden">
+                <div class="px-4 py-4">
+                    <div class="flex flex-col space-y-2">
+                        <a href="https://awarner.co.uk" class="mobile-menu-link block p-3 text-white hover:bg-[#6c7086] rounded transition-colors">Main Site</a>
+                        <a href="https://tools.awarner.co.uk" class="mobile-menu-link block p-3 text-white hover:bg-[#6c7086] rounded transition-colors">Other Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 flex-grow">
+        <div class="mx-auto bg-[#45475a] rounded-lg shadow-md p-8 mt-8 text-white">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-50 border border-red-200 text-red-800{% elif category == 'success' %}bg-green-50 border border-green-200 text-green-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+                        <div class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-900/30 border border-red-500/50 text-red-200{% elif category == 'success' %}bg-green-900/30 border border-green-500/50 text-green-200{% else %}bg-blue-900/30 border border-blue-500/50 text-blue-200{% endif %}">
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -29,10 +93,53 @@
         </div>
     </div>
     
-    <footer class="bg-white border-t mt-12">
-        <div class="max-w-6xl mx-auto px-5 py-6">
-            <p class="text-gray-600 text-center">&copy; 2025 Price Ticket Generator</p>
+    <!-- Footer -->
+    <footer class="bg-[#45475a] text-white py-4 mt-8">
+        <div class="container mx-auto px-4">
+            <p class="text-center text-sm">
+                © <span id="current-year">2025</span> Aidan Warner. All rights reserved.
+            </p>
         </div>
     </footer>
+
+    <script>
+        // Auto-update the year in the footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            // Toggle mobile menu
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('open');
+                });
+            }
+            
+            // Close mobile menu when a link is clicked
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('open');
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileMenu || !mobileMenuButton) return;
+                
+                const isClickInsideMenu = mobileMenu.contains(event.target);
+                const isClickOnButton = mobileMenuButton.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnButton && mobileMenu.classList.contains('open')) {
+                    mobileMenu.classList.remove('open');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

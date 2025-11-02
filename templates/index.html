@@ -3,93 +3,80 @@
 {% block title %}Price Ticket Generator{% endblock %}
 
 {% block content %}
-<style>
-/* Custom checkbox styling to ensure blue color */
-.product-checkbox {
-    accent-color: #2563eb; /* Blue-600 */
-}
-
-.product-checkbox:checked {
-    accent-color: #2563eb;
-    background-color: #2563eb;
-    border-color: #2563eb;
-}
-</style>
-<div class="bg-white rounded-xl shadow-sm border p-8">
-    <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">Generate Price Tickets</h2>
-        <p class="text-gray-600">Select products from the database or add custom tickets</p>
-    </div>
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-white mb-2">Generate Price Tickets</h2>
+    <p class="text-gray-300">Select products from the database or add custom tickets</p>
+</div>
 
     <form method="POST" action="{{ url_for('generate_tickets') }}" id="ticketForm">
         <!-- Selection Tools -->
-        <div class="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
-            <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors" onclick="selectAll()">Select All</button>
-            <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors" onclick="deselectAll()">Deselect All</button>
-            <span class="text-sm font-medium text-gray-600" id="selectionCount">0 selected</span>
+        <div class="flex items-center gap-4 mb-6 p-4 bg-[#1e1e2e] rounded-lg border border-[#6c7086]">
+            <button type="button" class="px-4 py-2 bg-[#6c7086] hover:bg-[#89b4fa] text-white rounded-lg font-medium transition-colors" onclick="selectAll()">Select All</button>
+            <button type="button" class="px-4 py-2 bg-[#6c7086] hover:bg-[#89b4fa] text-white rounded-lg font-medium transition-colors" onclick="deselectAll()">Deselect All</button>
+            <span class="text-sm font-medium text-gray-300" id="selectionCount">0 selected</span>
         </div>
 
         <!-- Product Grid -->
         {% if products %}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             {% for product in products %}
-            <div class="bg-white border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-300 hover:shadow-md transition-all duration-200 relative" onclick="toggleCard(this, {{ product.id }})">
+            <div class="bg-[#1e1e2e] border-2 border-[#6c7086] rounded-lg p-4 cursor-pointer hover:border-[#89b4fa] hover:shadow-md transition-all duration-200 relative" onclick="toggleCard(this, {{ product.id }})">
                 <input type="checkbox" 
                        name="product_ids[]" 
                        value="{{ product.id }}" 
-                       class="product-checkbox absolute top-3 right-3 w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 accent-blue-600"
+                       class="product-checkbox absolute top-3 right-3 w-5 h-5 text-[#89b4fa] bg-[#1e1e2e] border-2 border-[#6c7086] rounded focus:ring-[#89b4fa] focus:ring-2"
                        onclick="event.stopPropagation(); updateCount();">
-                <div class="text-sm font-mono text-blue-600 font-semibold mb-2 pr-8">{{ product.quick_code }}</div>
-                <div class="text-sm text-gray-800 mb-2 leading-tight">{{ product.name }}</div>
-                <div class="text-lg font-bold text-gray-800">£{{ "%.2f"|format(product.rrp) }}</div>
+                <div class="text-sm font-mono text-[#89b4fa] font-semibold mb-2 pr-8">{{ product.quick_code }}</div>
+                <div class="text-sm text-gray-200 mb-2 leading-tight">{{ product.name }}</div>
+                <div class="text-lg font-bold text-white">£{{ "%.2f"|format(product.rrp) }}</div>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <div class="text-center py-12 text-gray-500">
+        <div class="text-center py-12 text-gray-400">
             <p>No products in database. Add custom tickets below to get started.</p>
         </div>
         {% endif %}
 
         <!-- Custom Tickets Section -->
-        <div class="border-t pt-8">
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Add Custom Tickets</h3>
-            <p class="text-gray-600 mb-6">Custom tickets are temporary and won't be saved to the database.</p>
+        <div class="border-t border-[#6c7086] pt-8">
+            <h3 class="text-xl font-semibold text-white mb-2">Add Custom Tickets</h3>
+            <p class="text-gray-300 mb-6">Custom tickets are temporary and won't be saved to the database.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
-                    <label for="custom_quick_code" class="block text-sm font-medium text-gray-700 mb-2">Quick Code</label>
-                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
+                    <label for="custom_quick_code" class="block text-sm font-medium text-gray-300 mb-2">Quick Code</label>
+                    <input type="text" id="custom_quick_code" name="custom_quick_code" placeholder="e.g. ABC123" class="w-full px-3 py-2 border border-[#6c7086] bg-[#1e1e2e] text-white rounded-lg focus:ring-2 focus:ring-[#89b4fa] focus:border-[#89b4fa]" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
                 
                 <div>
-                    <label for="custom_name" class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
+                    <label for="custom_name" class="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
+                    <input type="text" id="custom_name" name="custom_name" placeholder="e.g. Premium Widget" class="w-full px-3 py-2 border border-[#6c7086] bg-[#1e1e2e] text-white rounded-lg focus:ring-2 focus:ring-[#89b4fa] focus:border-[#89b4fa]" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
                 
                 <div>
-                    <label for="custom_rrp" class="block text-sm font-medium text-gray-700 mb-2">RRP</label>
-                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onkeypress="handleCustomTicketKeypress(event)">
+                    <label for="custom_rrp" class="block text-sm font-medium text-gray-300 mb-2">RRP</label>
+                    <input type="number" id="custom_rrp" name="custom_rrp" step="0.01" min="0" placeholder="e.g. 99.99" class="w-full px-3 py-2 border border-[#6c7086] bg-[#1e1e2e] text-white rounded-lg focus:ring-2 focus:ring-[#89b4fa] focus:border-[#89b4fa]" onkeypress="handleCustomTicketKeypress(event)">
                 </div>
             </div>
             
-            <button type="button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors" onclick="addCustomTicketAjax()" id="addCustomBtn">
+            <button type="button" class="px-6 py-2 bg-[#89b4fa] hover:bg-[#7287fd] text-[#1e1e2e] font-bold rounded-lg transition-colors" onclick="addCustomTicketAjax()" id="addCustomBtn">
                 Add Custom Ticket
             </button>
 
             <!-- Display Custom Tickets -->
             <div class="mt-6" id="customTicketsContainer">
-                <h4 class="text-lg font-medium text-gray-900 mb-4" id="customTicketsHeader" {% if not custom_tickets %}style="display: none;"{% endif %}>Custom Tickets:</h4>
+                <h4 class="text-lg font-medium text-white mb-4" id="customTicketsHeader" {% if not custom_tickets %}style="display: none;"{% endif %}>Custom Tickets:</h4>
                 <div class="space-y-3" id="customTicketsList">
                     {% if custom_tickets %}
                         {% for ticket in custom_tickets %}
-                        <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg" data-ticket-id="{{ ticket.id }}">
+                        <div class="flex items-center justify-between p-4 bg-[#1e1e2e] border border-[#89b4fa]/50 rounded-lg" data-ticket-id="{{ ticket.id }}">
                             <div class="flex items-center gap-4">
-                                <span class="font-mono text-sm font-semibold text-blue-600">{{ ticket.quick_code }}</span>
-                                <span class="text-gray-800">{{ ticket.name }}</span>
-                                <span class="font-bold text-gray-800">£{{ "%.2f"|format(ticket.rrp) }}</span>
+                                <span class="font-mono text-sm font-semibold text-[#89b4fa]">{{ ticket.quick_code }}</span>
+                                <span class="text-gray-200">{{ ticket.name }}</span>
+                                <span class="font-bold text-white">£{{ "%.2f"|format(ticket.rrp) }}</span>
                             </div>
-                            <button type="button" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('{{ ticket.id }}')">Remove</button>
+                            <button type="button" class="px-3 py-1 bg-red-900/30 hover:bg-red-800/50 text-red-300 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('{{ ticket.id }}')">Remove</button>
                         </div>
                         {% endfor %}
                     {% endif %}
@@ -98,8 +85,8 @@
         </div>
 
         <!-- Generate Button -->
-        <div class="mt-8 pt-6 border-t">
-            <button type="submit" class="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg transition-colors" id="generateBtn">
+        <div class="mt-8 pt-6 border-t border-[#6c7086]">
+            <button type="submit" class="w-full px-6 py-4 bg-[#89b4fa] hover:bg-[#7287fd] text-[#1e1e2e] text-lg font-bold rounded-lg transition-colors" id="generateBtn">
                 Generate PDF Tickets
             </button>
             
@@ -107,7 +94,7 @@
             <div id="generateMessage" class="mt-4 hidden">
                 <div class="p-4 rounded-lg border flex items-center justify-between" id="messageContent">
                     <span id="messageText"></span>
-                    <button type="button" class="ml-4 text-gray-400 hover:text-gray-600" onclick="hideMessage()">
+                    <button type="button" class="ml-4 text-gray-400 hover:text-gray-200" onclick="hideMessage()">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
@@ -254,13 +241,13 @@ function addTicketToUI(ticket) {
     
     // Create the ticket HTML with initial opacity 0 for animation
     const ticketHTML = `
-        <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg opacity-0 transform scale-95 transition-all duration-300" data-ticket-id="${ticket.id}">
+        <div class="flex items-center justify-between p-4 bg-[#1e1e2e] border border-[#89b4fa]/50 rounded-lg opacity-0 transform scale-95 transition-all duration-300" data-ticket-id="${ticket.id}">
             <div class="flex items-center gap-4">
-                <span class="font-mono text-sm font-semibold text-blue-600">${ticket.quick_code}</span>
-                <span class="text-gray-800">${ticket.name}</span>
-                <span class="font-bold text-gray-800">£${ticket.rrp.toFixed(2)}</span>
+                <span class="font-mono text-sm font-semibold text-[#89b4fa]">${ticket.quick_code}</span>
+                <span class="text-gray-200">${ticket.name}</span>
+                <span class="font-bold text-white">£${ticket.rrp.toFixed(2)}</span>
             </div>
-            <button type="button" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('${ticket.id}')">Remove</button>
+            <button type="button" class="px-3 py-1 bg-red-900/30 hover:bg-red-800/50 text-red-300 text-sm rounded-md transition-colors" onclick="removeCustomTicketAjax('${ticket.id}')">Remove</button>
         </div>
     `;
     
@@ -324,20 +311,20 @@ function updateCardStyle(card, isChecked) {
     
     if (isChecked) {
         // Update card styling
-        card.classList.remove('border-gray-200', 'hover:border-blue-300');
-        card.classList.add('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-200');
+        card.classList.remove('border-[#6c7086]', 'hover:border-[#89b4fa]');
+        card.classList.add('border-[#89b4fa]', 'bg-[#89b4fa]/10', 'ring-2', 'ring-[#89b4fa]/30');
         
         // Update checkbox styling - make it more prominent when checked
-        checkbox.classList.remove('border-gray-300', 'bg-white');
-        checkbox.classList.add('border-blue-500', 'bg-blue-500');
+        checkbox.classList.remove('border-[#6c7086]', 'bg-[#1e1e2e]');
+        checkbox.classList.add('border-[#89b4fa]', 'bg-[#89b4fa]');
     } else {
         // Reset card styling
-        card.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-200');
-        card.classList.add('border-gray-200', 'hover:border-blue-300');
+        card.classList.remove('border-[#89b4fa]', 'bg-[#89b4fa]/10', 'ring-2', 'ring-[#89b4fa]/30');
+        card.classList.add('border-[#6c7086]', 'hover:border-[#89b4fa]');
         
         // Reset checkbox styling
-        checkbox.classList.remove('border-blue-500', 'bg-blue-500');
-        checkbox.classList.add('border-gray-300', 'bg-white');
+        checkbox.classList.remove('border-[#89b4fa]', 'bg-[#89b4fa]');
+        checkbox.classList.add('border-[#6c7086]', 'bg-[#1e1e2e]');
     }
 }
 
@@ -379,9 +366,9 @@ function showMessage(text, type = 'success') {
     // Set message styling based on type
     messageContent.className = 'p-4 rounded-lg border flex items-center justify-between';
     if (type === 'success') {
-        messageContent.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+        messageContent.classList.add('bg-green-900/30', 'border-green-500/50', 'text-green-200');
     } else if (type === 'error') {
-        messageContent.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+        messageContent.classList.add('bg-red-900/30', 'border-red-500/50', 'text-red-200');
     }
     
     // Show message
