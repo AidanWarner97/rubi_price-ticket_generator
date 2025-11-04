@@ -13,3 +13,4 @@ instance/
 generated_tickets/
 templates/.ipynb_checkpoints/
 cookies.txt
+*.pdf
