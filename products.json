@@ -2,438 +2,511 @@
   {
     "id": 1,
     "quick_code": "57320",
+    "rubi_code": "4977",
     "name": "Foragres Drill Bit (120mm)",
     "rrp": 168.74
   },
   {
     "id": 2,
     "quick_code": "165978",
+    "rubi_code": "6976",
     "name": "Premium Drygres Drill Bit (60mm)",
     "rrp": 101.70
   },
   {
     "id": 3,
     "quick_code": "165977",
+    "rubi_code": "6975",
     "name": "Premium Drygres Drill Bit (50mm)",
     "rrp": 87.16
   },
   {
     "id": 4,
     "quick_code": "165976",
+    "rubi_code": "6974",
     "name": "Premium Drygres Drill Bit (43mm)",
     "rrp": 77.60
   },
   {
     "id": 5,
     "quick_code": "57278",
+    "rubi_code": "4912",
     "name": "Drygres Drill Bit (35mm)",
     "rrp": 65.28
   },
   {
     "id": 6,
     "quick_code": "165974",
+    "rubi_code": "6972",
     "name": "Premium Drygres Drill Bit (28mm)",
     "rrp": 55.84
   },
   {
     "id": 7,
     "quick_code": "165973",
+    "rubi_code": "6971",
     "name": "Premium Drygres Drill Bit (20mm)",
     "rrp": 47.90
   },
   {
     "id": 8,
     "quick_code": "57274",
+    "rubi_code": "5991",
     "name": "Drygres Drill Bit (12mm)",
     "rrp": 27.32
   },
   {
     "id": 9,
     "quick_code": "165970",
+    "rubi_code": "6918",
     "name": "Premium Drygres Drill Bit (8mm)",
     "rrp": 25.20
   },
   {
     "id": 10,
     "quick_code": "165968",
+    "rubi_code": "6900",
     "name": "Premium Drygres Drill Bit (6mm)",
     "rrp": 24.14
   },
   {
     "id": 11,
     "quick_code": "176502",
+    "rubi_code": "6986",
     "name": "Conical Diamond Bit (2-35mm)",
     "rrp": 43.28
   },
   {
     "id": 12,
     "quick_code": "57339",
+    "rubi_code": "4904",
     "name": "Easygres Drill Bit Kit (6-12mm)",
     "rrp": 44.12
   },
   {
     "id": 13,
     "quick_code": "165959",
+    "rubi_code": "30986",
     "name": "TVR 115 Superpro",
     "rrp": 38.26
   },
   {
     "id": 14,
     "quick_code": "57184",
+    "rubi_code": "31932",
     "name": "TVA 115 Superpro",
     "rrp": 39.44
   },
   {
     "id": 15,
     "quick_code": "176481",
+    "rubi_code": "40917",
     "name": "TGS 115 Superpro",
     "rrp": 68.66
   },
   {
     "id": 16,
     "quick_code": "176549",
+    "rubi_code": "32951",
     "name": "Mini Viper TVA Superpro",
     "rrp": 35.76
   },
   {
     "id": 17,
     "quick_code": "176503",
+    "rubi_code": "6987",
     "name": "Conical Diamond Bit (20-48mm)",
     "rrp": 60.54
   },
   {
     "id": 18,
     "quick_code": "165946",
+    "rubi_code": "18919",
     "name": "Suction Cup with Vaacuum Pump",
     "rrp": 91.54
   },
   {
     "id": 19,
     "quick_code": "57878",
+    "rubi_code": "81989",
     "name": "Gel Duplex Knee Pads",
     "rrp": 61.52
   },
   {
     "id": 20,
     "quick_code": "165984",
+    "rubi_code": "51931",
     "name": "4 Drygres Bit Kit",
     "rrp": 318.12
   },
   {
     "id": 21,
     "quick_code": "165983",
+    "rubi_code": "51929",
     "name": "6 Drygres Bit Kit",
     "rrp": 353.84
   },
   {
     "id": 22,
     "quick_code": "57293",
+    "rubi_code": "68923",
     "name": "TCR Disc and Drygres Drill Bit Kit",
     "rrp": 183.54
   },
   {
     "id": 23,
     "quick_code": "176498",
+    "rubi_code": "52938",
     "name": "Bullnose Superpro",
     "rrp": 133.90
   },
   {
     "id": 24,
     "quick_code": "57723",
+    "rubi_code": "2973",
     "name": "Long Tile Spacers (3mm) x1000",
     "rrp": 16.10
   },
   {
     "id": 25,
     "quick_code": "57719",
+    "rubi_code": "2972",
     "name": "Long Tile Spacers (2mm) x1000",
     "rrp": 11.52
   },
   {
     "id": 26,
     "quick_code": "57718",
+    "rubi_code": "2952",
     "name": "Long Tile Spacers (2mm) x300",
     "rrp": 4.32
   },
   {
     "id": 27,
     "quick_code": "57714",
+    "rubi_code": "2912",
     "name": "Long Tile Spacers (1.5mm) x300",
     "rrp": 3.84
   },
   {
     "id": 28,
     "quick_code": "57020",
+    "rubi_code": "1991",
     "name": "10mm Plus Scoring Wheel",
     "rrp": 21.54
   },
   {
     "id": 29,
     "quick_code": "166074",
+    "rubi_code": "35965",
     "name": "Cyclone Kit (3mm)",
     "rrp": 50.30
   },
   {
     "id": 30,
     "quick_code": "166070",
+    "rubi_code": "35949",
     "name": "Cyclone Caps x100",
     "rrp": 23.52
   },
   {
     "id": 31,
     "quick_code": "166051",
+    "rubi_code": "35937",
     "name": "Cyclone Bases (1mm) x100",
     "rrp": 7.52
   },
   {
     "id": 32,
     "quick_code": "57852",
+    "rubi_code": "88773",
     "name": "Black Plastic Tub (40L)",
     "rrp": 6.38
   },
   {
     "id": 33,
     "quick_code": "166073",
+    "rubi_code": "35964",
     "name": "Cyclone Kit (1.5mm)",
     "rrp": 53.46
   },
   {
     "id": 34,
     "quick_code": "57095",
+    "rubi_code": "20908",
     "name": "Sponge Float",
     "rrp": 13.00
   },
   {
     "id": 35,
     "quick_code": "57645",
+    "rubi_code": "66900",
     "name": "Double Suction Cup",
     "rrp": 56.58
   },
   {
     "id": 36,
     "quick_code": "56978",
+    "rubi_code": "14987",
     "name": "Speed-92 N with Case",
     "rrp": 486.22
   },
   {
     "id": 37,
     "quick_code": "56926",
+    "rubi_code": "18922",
     "name": "TS-66 Max Orange",
     "rrp": 467.30
   },
   {
     "id": 38,
     "quick_code": "57234",
+    "rubi_code": "30925",
     "name": "CPA 180 Superpro",
     "rrp": 68.04
   },
   {
     "id": 39,
     "quick_code": "57272",
+    "rubi_code": "5990",
     "name": "Drygres Drill Bit (10mm)",
     "rrp": 25.12
   },
   {
     "id": 40,
     "quick_code": "57281",
+    "rubi_code": "4914",
     "name": "Drygres Drill Bit (50mm)",
     "rrp": 79.26
   },
   {
     "id": 41,
     "quick_code": "57339",
+    "rubi_code": "4904",
     "name": "Drygres Kit 4",
     "rrp": 44.12
   },
   {
     "id": 42,
     "quick_code": "57366",
+    "rubi_code": "62974",
     "name": "Resin Dry Polishing Pad (800 Grit)",
     "rrp": 10.00
   },
   {
     "id": 43,
     "quick_code": "57367",
+    "rubi_code": "62975",
     "name": "Resin Dry Polishing Pad (1500 Grit)",
     "rrp": 10.00
   },
   {
     "id": 44,
     "quick_code": "57368",
+    "rubi_code": "62976",
     "name": "Resin Dry Polishing Pad (3000 Grit)",
     "rrp": 10.00
   },
   {
     "id": 45,
     "quick_code": "57370",
+    "rubi_code": "62986",
     "name": "Backup Pad",
     "rrp": 14.42
   },
   {
     "id": 46,
     "quick_code": "57371",
+    "rubi_code": "61974",
     "name": "Manual Polishing Pad (60 Grit)",
     "rrp": 29.16
   },
   {
     "id": 47,
     "quick_code": "57372",
+    "rubi_code": "61975",
     "name": "Manual Polishing Pad (120 Grit)",
     "rrp": 29.16
   },
   {
     "id": 48,
     "quick_code": "57373",
+    "rubi_code": "61976",
     "name": "Manual Polishing Pad (200 Grit)",
     "rrp": 29.16
   },
   {
     "id": 49,
     "quick_code": "57374",
+    "rubi_code": "61977",
     "name": "Manual Polishing Pad (400 Grit)",
     "rrp": 29.16
   },
   {
     "id": 50,
     "quick_code": "57473",
+    "rubi_code": "72907",
     "name": "Jagged Trowel (6mm)",
     "rrp": 18.30
   },
   {
     "id": 51,
     "quick_code": "57476",
+    "rubi_code": "72908",
     "name": "Jagged Trowel (8mm)",
     "rrp": 18.30
   },
   {
     "id": 52,
     "quick_code": "57478",
+    "rubi_code": "72909",
     "name": "Jagged Trowel (10mm)",
     "rrp": 18.30
   },
   {
     "id": 53,
     "quick_code": "57481",
+    "rubi_code": "74942",
     "name": "Stainless Jagged Trowel (12mm)",
     "rrp": 20.44
   },
   {
     "id": 54,
     "quick_code": "57569",
+    "rubi_code": "65970",
     "name": "Rubber Grout Float",
     "rrp": 20.44
   },
   {
     "id": 55,
     "quick_code": "57661",
+    "rubi_code": "82986",
     "name": "Framer Hammer",
     "rrp": 29.48
   },
   {
     "id": 56,
     "quick_code": "57894",
+    "rubi_code": "20917",
     "name": "Superpro Plus Sponge",
     "rrp": 3.68
   },
   {
     "id": 57,
     "quick_code": "57896",
+    "rubi_code": "20932",
     "name": "Sweepex Superpro Plus Sponge",
     "rrp": 4.82
   },
   {
     "id": 58,
     "quick_code": "57903",
+    "rubi_code": "24967",
     "name": "Hidro Pro Sponge",
     "rrp": 2.84
   },
   {
     "id": 59,
     "quick_code": "57905",
+    "rubi_code": "20908",
     "name": "Sponge Float Superpro",
     "rrp": 14.20
   },
   {
     "id": 60,
     "quick_code": "57949",
+    "rubi_code": "69915",
     "name": "Rubiclean 2 Superpro",
     "rrp": 89.80
   },
   {
     "id": 61,
     "quick_code": "92498",
+    "rubi_code": "17909",
     "name": "TX-710 MAX Manual Cutter",
     "rrp": 578.46
   },
   {
     "id": 62,
     "quick_code": "165936",
+    "rubi_code": "16984",
     "name": "Pro-Edger Mitring Wheel",
     "rrp": 38.26
   },
   {
     "id": 63,
     "quick_code": "165960",
+    "rubi_code": "30987",
     "name": "TVR 125 Superpro",
     "rrp": 41.34
   },
   {
     "id": 64,
     "quick_code": "165971",
+    "rubi_code": "6919",
     "name": "Premium Drygres Drill Bit (10mm)",
     "rrp": 42.52
   },
   {
     "id": 65,
     "quick_code": "166009",
+    "rubi_code": "76947",
     "name": "Stainless Jagged Trowel (15mm)",
     "rrp": 22.10
   },
   {
     "id": 66,
     "quick_code": "166016",
+    "rubi_code": "66929",
     "name": "Section Pad for Rough Surfaces",
     "rrp": 33.36
   },
   {
     "id": 67,
     "quick_code": "166049",
+    "rubi_code": "3956",
     "name": "Delta Levelling System (1mm)",
     "rrp": 43.40
   },
   {
     "id": 68,
     "quick_code": "166050",
+    "rubi_code": "3958",
     "name": "Delta Levelling System (2mm)",
     "rrp": 43.40
   },
   {
     "id": 69,
     "quick_code": "166057",
+    "rubi_code": "35943",
     "name": "Cyclone Bases (2mm) x100",
     "rrp": 7.52
   },
   {
     "id": 70,
     "quick_code": "166060",
+    "rubi_code": "35946",
     "name": "Cyclone Bases (3mm) x100",
     "rrp": 7.52
   },
   {
     "id": 71,
     "quick_code": "176499",
+    "rubi_code": "52939",
     "name": "Half Bullnose Superpro",
     "rrp": 131.84
   },
   {
     "id": 72,
     "quick_code": "176508",
+    "rubi_code": "16902",
     "name": "Tile Levelling Protector x100",
     "rrp": 14.50
   },
   {
     "id": 73,
     "quick_code": "57288",
+    "rubi_code": "50944",
     "name": "Multidrill Guide (Max 83mm)",
     "rrp": 39.08
   }

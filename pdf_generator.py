@@ -9,7 +9,7 @@ from reportlab.pdfbase import pdfmetrics
 import os
 
 
-def generate_price_tickets(products, output_file):
+def generate_price_tickets(products, output_file, debug=False):
     """
     Generate a PDF with price tickets for selected products.
     Each ticket shows: Rubi Logo, Quick Code, Product Name, and RRP
@@ -33,8 +33,22 @@ def generate_price_tickets(products, output_file):
     tickets_per_page = cols * rows
     
     # Calculate positions with spacing
+    # If available spacing is negative (too many columns/rows), clamp to 0 so tickets keep their specified size
     x_spacing = (page_width - 2 * margin - (cols * ticket_width)) / (cols - 1) if cols > 1 else 0
     y_spacing = (page_height - 2 * margin - (rows * ticket_height)) / (rows - 1) if rows > 1 else 0
+    x_spacing = max(0, x_spacing)
+    y_spacing = max(0, y_spacing)
+
+    # Debug printouts to help verify sizes (in points and cm)
+    if debug:
+        print("PAGE (points):", page_width, "x", page_height)
+        print("PAGE (cm):", page_width / cm, "x", page_height / cm)
+        print("MARGIN (mm):", margin / mm)
+        print("TICKET (points):", ticket_width, "x", ticket_height)
+        print("TICKET (cm):", ticket_width / cm, "x", ticket_height / cm)
+        print("COLS x ROWS:", cols, "x", rows, "=> tickets_per_page:", tickets_per_page)
+        print("x_spacing (points/mm):", x_spacing, "/", x_spacing / mm)
+        print("y_spacing (points/mm):", y_spacing, "/", y_spacing / mm)
     
     ticket_count = 0
     
@@ -123,13 +137,37 @@ def draw_ticket(c, x, y, width, height, product):
     c.line(x + logo_width, y + height - qc_section_height, x + width, y + height - qc_section_height)
     c.line(x + logo_width, y + rrp_section_height, x + width, y + rrp_section_height)
     
-    # QC Code (top right section) - vertically centered, size 11
-    c.setFont("Helvetica", 11)
+    # QC Code (top right section) - vertically centered, two lines (QC and RU)
+    # Use font metrics (points) so units are consistent with canvas coordinates
+    font_name_qc = "Helvetica"
+    font_size_qc = 11
+    c.setFont(font_name_qc, font_size_qc)
     c.setFillColor(colors.black)
-    # Calculate vertical center of QC section (1.06cm high)
-    qc_text_height = 11 * 0.352778  # Approximate height in mm for font size 11
-    qc_y = y + height - qc_section_height / 2 - qc_text_height / 2
-    c.drawString(right_x, qc_y, f"QC: {product['quick_code']}")
+
+    # Get ascent/descent in points and compute line height + leading
+    ascent_qc = pdfmetrics.getAscent(font_name_qc, font_size_qc)
+    descent_qc = abs(pdfmetrics.getDescent(font_name_qc, font_size_qc))
+    line_height_qc = ascent_qc + descent_qc
+    leading_qc = font_size_qc * 0.2
+
+    # Two-line block total height
+    total_block_height = 2 * line_height_qc + leading_qc
+
+    # QC section top and bottom in canvas coordinates
+    qc_section_top = y + height
+    qc_section_bottom = qc_section_top - qc_section_height
+
+    # Vertical space to leave above the text block to vertically center it
+    space_top = (qc_section_height - total_block_height) / 2.0
+
+    # Baseline for first line: top_of_block = baseline + ascent => baseline = top_of_block - ascent
+    top_of_block = qc_section_top - space_top
+    first_baseline = top_of_block - ascent_qc
+
+    # Draw QC then RU on the next baseline down
+    c.drawString(right_x, first_baseline, f"QC: {product.get('quick_code', '')}")
+    second_baseline = first_baseline - (line_height_qc + leading_qc)
+    c.drawString(right_x, second_baseline, f"RU: {product.get('rubi_code', '')}")
     
     # Product Name (middle right section) - vertically centered, size 11, NOT BOLD
     font_name = "Helvetica"
